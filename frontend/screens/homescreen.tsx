@@ -5,6 +5,7 @@
     import CustomDeleteButton from "../components/CustomDeleteButton";
     import Checkbox from "../components/Checkbox";
     import { addNewTask } from "../components/AddNewTask";
+    import { deleteTask } from "../components/DeleteTask";
     import CustomAddButton from "../components/CustomAddButton";
 
     const Home:React.FC=()=>{
@@ -14,12 +15,6 @@
         const editTask=(id:number)=>{
             Alert.alert("Edit task")
         }
-
-        const deletetask=()=>{
-            return(
-            <Text style={styles.text}>All Task</Text>
-            )
-            }
 
         return(
             <>
@@ -51,7 +46,7 @@
                         <Checkbox />
                         <Text style={styles.todotext}>{task.title}</Text>
                         <CustomEditButton title="Edit" onPress={() => console.log("Edit task")} />
-                        {/* <CustomDeleteButton title="Delete" onPress={deleteTask} /> */}
+                        <CustomDeleteButton title="Delete" onPress={()=>deleteTask(task.id,setTasks)} />
                     </View>
                 ))}
             </ScrollView>
