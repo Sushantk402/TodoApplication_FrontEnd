@@ -6,6 +6,7 @@
     import Checkbox from "../components/Checkbox";
     import { database } from "../../data/models/database";
     import Task from "../../data/models/Task";
+    import CustomAddButton from "../components/CustomAddButton";
 
     const Home:React.FC=()=>{
         const [tasks, setTasks] = useState<{ id: string; title: string }[]>([]);
@@ -57,12 +58,12 @@
               onChangeText={setTaskText}
               />
 
-             <CustomEditButton title="Add" onPress={addNewTask} />
+             <CustomAddButton title="Add" onPress={addNewTask} />
             </View>
 
             <View style={styles.buttonContainer}> 
                 <View style={styles.buttons}>
-                    <Button  title="new Task" color={"#bfb0b0"} onPress={addNewTask} />
+                    <Text style={styles.todo}>TO DO</Text>
                 </View>
             </View> 
 
@@ -70,7 +71,7 @@
                 {tasks.map((task)=>(
                     <View key={task.id} style={styles.row}>
                         <Checkbox />
-                        <Text>{task.title}</Text>
+                        <Text style={styles.todotext}>{task.title}</Text>
                         <CustomEditButton title="Edit" onPress={() => console.log("Edit task")} />
                         <CustomDeleteButton title="Delete" onPress={() => console.log("Delete task")} />
                     </View>
