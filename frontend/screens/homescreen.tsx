@@ -8,7 +8,7 @@
     import Task from "../../data/models/Task";
 
     const Home:React.FC=()=>{
-        const [tasks, setTasks] = useState<{ id: string; title: string }[]>([{ id: '1', title: '' }]);
+        const [tasks, setTasks] = useState<{ id: string; title: string }[]>([]);
         const [taskText, setTaskText] = useState("");
 
         const addNewTask=async ()=>{
@@ -24,8 +24,8 @@
                         task.description="New Task";
                         task.createdAt=new Date();
                     });
-                    setTasks([...tasks,{id:newTask.id,title:newTask.title}]);
-                    setTaskText(" ");
+                    setTasks(prevTasks => [...prevTasks, { id: newTask.id, title: newTask.title }]);
+                    setTaskText(""); 
                 })
             }catch(error){
                 console.error("Error saving task :",error);
@@ -49,7 +49,7 @@
             </View>    
             
             <View style={styles.row}>
-             <Checkbox />
+             
              <TextInput 
               value={taskText}
               placeholder="Enter the task"
@@ -58,8 +58,6 @@
               />
 
              <CustomEditButton title="Add" onPress={addNewTask} />
-             <CustomEditButton title="Edit" onPress={() => console.log("Edit task")} />
-             <CustomDeleteButton title="Delete" onPress={() => console.log("Delete task")} />
             </View>
 
             <View style={styles.buttonContainer}> 
@@ -68,17 +66,16 @@
                 </View>
             </View> 
 
-            {/* <ScrollView  contentContainerStyle={styles.contentContainer}>
-            <View>
-            {tasks.map((task)=>(
-                <View key={task.id} style={styles.inputRow}>
-                    
-                </View>
-            ))}
-            </View>
-            
-            
-            </ScrollView> */}
+            <ScrollView  contentContainerStyle={styles.contentContainer}>
+                {tasks.map((task)=>(
+                    <View key={task.id} style={styles.row}>
+                        <Checkbox />
+                        <Text>{task.title}</Text>
+                        <CustomEditButton title="Edit" onPress={() => console.log("Edit task")} />
+                        <CustomDeleteButton title="Delete" onPress={() => console.log("Delete task")} />
+                    </View>
+                ))}
+            </ScrollView>
 
             <View style={styles.bottomtap}>
                 <Button title="All Task" color={"#bfb0b0"} />
