@@ -4,34 +4,12 @@
     import CustomEditButton from "../components/CustomEditButtton";
     import CustomDeleteButton from "../components/CustomDeleteButton";
     import Checkbox from "../components/Checkbox";
-    import { database } from "../../data/models/database";
-    import Task from "../../data/models/Task";
+    import { addNewTask } from "../components/AddNewTask";
     import CustomAddButton from "../components/CustomAddButton";
 
     const Home:React.FC=()=>{
         const [tasks, setTasks] = useState<{ id: string; title: string }[]>([]);
-        const [taskText, setTaskText] = useState("");
-
-        const addNewTask=async ()=>{
-            if(!taskText.trim()){
-                Alert.alert("Error","Task cannot be empty");
-                return;
-            }
-
-            try{
-                await database.write(async()=>{
-                    const newTask = await database.get<Task>('task').create(task=>{
-                        task.title=taskText;
-                        task.description="New Task";
-                        task.createdAt=new Date();
-                    });
-                    setTasks(prevTasks => [...prevTasks, { id: newTask.id, title: newTask.title }]);
-                    setTaskText(""); 
-                })
-            }catch(error){
-                console.error("Error saving task :",error);
-            }
-        }
+        const [taskText, setTaskText] = useState("");    
 
         const editTask=(id:number)=>{
             Alert.alert("Edit task")
@@ -58,7 +36,7 @@
               onChangeText={setTaskText}
               />
 
-             <CustomAddButton title="Add" onPress={addNewTask} />
+             <CustomAddButton title="Add" onPress={()=>addNewTask(taskText,setTasks,setTaskText)} />
             </View>
 
             <View style={styles.buttonContainer}> 
@@ -73,7 +51,7 @@
                         <Checkbox />
                         <Text style={styles.todotext}>{task.title}</Text>
                         <CustomEditButton title="Edit" onPress={() => console.log("Edit task")} />
-                        <CustomDeleteButton title="Delete" onPress={() => console.log("Delete task")} />
+                        {/* <CustomDeleteButton title="Delete" onPress={deleteTask} /> */}
                     </View>
                 ))}
             </ScrollView>
