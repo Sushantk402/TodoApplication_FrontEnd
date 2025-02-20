@@ -4,7 +4,7 @@ import Task from "../../data/models/Task";
 
 export const deleteTask = async(
     id:string,
-    setTasks:React.Dispatch<React.SetStateAction<{id:string,title:string}[]>>
+    setTasks:React.Dispatch<React.SetStateAction<{id:string,title:string,createdAt: string}[]>>
 )=>{
     try{
         await database.write(async()=>{

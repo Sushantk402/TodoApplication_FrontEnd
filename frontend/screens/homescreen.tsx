@@ -12,7 +12,7 @@
     import Task from "../../data/models/Task"; 
 
     const Home:React.FC=()=>{
-        const [tasks, setTasks] = useState<{ id: string; title: string }[]>([]);
+        const [tasks, setTasks] = useState<{ id: string; title: string;createdAt: string }[]>([]);
         const [taskText, setTaskText] = useState("");   
 
         const fetchTasks = async () =>{
@@ -20,7 +20,7 @@
                 const taskCollection = database.get<Task>('task');
                 const fetchedTasks = await taskCollection.query().fetch();
 
-                setTasks(fetchedTasks.map(task => ({id:task.id,title:task.title})));
+                setTasks(fetchedTasks.map(task => ({id:task.id,title:task.title,createdAt:task.createdAt.toISOString().split("T")[0]})));
             }catch(error){
                 console.error("Error fetching tasks:", error);
                 Alert.alert("Error", "Could not load tasks.");
@@ -61,13 +61,15 @@
                         <Checkbox />
                         <TextInput 
                         value={task.title}
-                        style={[styles.textInput ,{width:'60%'} ]}
+                        style={[styles.textInput ,{width:'55%'} ]}
                         onChangeText={(text)=>
                             setTasks(prevTask=>prevTask.map(t=>t.id===task.id?{...t,title:text}:t))
                         }
                         ></TextInput>
+                        
                         <CustomEditButton title="Edit" onPress={() => editTask(task.id,task.title,setTasks)} />
                         <CustomDeleteButton title="Delete" onPress={()=>deleteTask(task.id,setTasks)} />
+                        <Text style={{ fontSize: 10, color: "gray" }}>{task.createdAt}</Text>
                     </View>
                 ))}
             </ScrollView>

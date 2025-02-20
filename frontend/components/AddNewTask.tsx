@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 
 export const addNewTask = async(
     taskText:string,
-    setTasks:React.Dispatch<React.SetStateAction<{id:string,title:string}[]>>,
+    setTasks:React.Dispatch<React.SetStateAction<{id:string,title:string,createdAt: string}[]>>,
     setTaskText:React.Dispatch<React.SetStateAction<string>>
 )=>{
     if (!taskText.trim()) {
@@ -18,7 +18,7 @@ export const addNewTask = async(
                 task.description = "New Task";
                 task.createdAt = new Date();
             });
-            setTasks(prevTasks => [...prevTasks,{id:newTask.id,title:newTask.title}]);
+            setTasks(prevTasks => [...prevTasks,{id:newTask.id,title:newTask.title,createdAt: newTask.createdAt.toISOString().split("T")[0]}]);
             setTaskText("");
         })
     }catch(error){

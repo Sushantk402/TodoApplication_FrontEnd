@@ -5,7 +5,7 @@ import Task from "../../data/models/Task";
 export const editTask = async(
 id:string,
 newTitle:string,
-setTasks:React.Dispatch<React.SetStateAction<{id:string,title:string}[]>>)=>{
+setTasks:React.Dispatch<React.SetStateAction<{id:string,title:string,createdAt: string}[]>>)=>{
     if(!newTitle.trim()){
         Alert.alert("Error","Task title cannot be empty")
     }
