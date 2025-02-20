@@ -1,73 +1,94 @@
-import React, { useState } from "react";
-import { View,Text,Button, TextInput, ScrollView, Alert} from "react-native";
-import styles from "../components/Style"; 
-import CustomEditButton from "../components/CustomEditButtton";
-import CustomDeleteButton from "../components/CustomDeleteButton";
-import Checkbox from "../components/Checkbox";
+    import React, { useState } from "react";
+    import { View,Text,Button, TextInput, ScrollView, Alert} from "react-native";
+    import styles from "../components/Style"; 
+    import CustomEditButton from "../components/CustomEditButtton";
+    import CustomDeleteButton from "../components/CustomDeleteButton";
+    import Checkbox from "../components/Checkbox";
+    import { database } from "../../data/models/database";
+    import Task from "../../data/models/Task";
 
-const Home:React.FC=()=>{
-    const[inputBox,setInputBox]=useState<number[]>([]);
+    const Home:React.FC=()=>{
+        const [tasks, setTasks] = useState<{ id: string; title: string }[]>([{ id: '1', title: '' }]);
+        const [taskText, setTaskText] = useState("");
 
-    const addNewTask =() =>{
-        setInputBox([...inputBox,Date.now()])
-    }
+        const addNewTask=async ()=>{
+            if(!taskText.trim()){
+                Alert.alert("Error","Task cannot be empty");
+                return;
+            }
 
-
-    const editTask=(id:number)=>{
-        Alert.alert("Edit task")
-    }
-
-    const deletetask=()=>{
-        return(
-        <Text style={styles.text}>All Task</Text>
-        )
+            try{
+                await database.write(async()=>{
+                    const newTask = await database.get<Task>('task').create(task=>{
+                        task.title=taskText;
+                        task.description="New Task";
+                        task.createdAt=new Date();
+                    });
+                    setTasks([...tasks,{id:newTask.id,title:newTask.title}]);
+                    setTaskText(" ");
+                })
+            }catch(error){
+                console.error("Error saving task :",error);
+            }
         }
 
-    return(
-        <>
-        <View style={styles.mainTitle}>
-            <Text style={styles.text}>Task For the Day</Text>
-        </View>    
-        
-        <ScrollView  contentContainerStyle={styles.contentContainer}>
-        <View>
-        {inputBox.map((id)=>(
-            <View key={id} style={styles.inputRow}>
-                <View>
-                   <Checkbox />
+        const editTask=(id:number)=>{
+            Alert.alert("Edit task")
+        }
+
+        const deletetask=()=>{
+            return(
+            <Text style={styles.text}>All Task</Text>
+            )
+            }
+
+        return(
+            <>
+            <View style={styles.mainTitle}>
+                <Text style={styles.text}>Task For the Day</Text>
+            </View>    
+            
+            <View style={styles.row}>
+             <Checkbox />
+             <TextInput 
+              value={taskText}
+              placeholder="Enter the task"
+              style={styles.textInput} 
+              onChangeText={setTaskText}
+              />
+
+             <CustomEditButton title="Add" onPress={addNewTask} />
+             <CustomEditButton title="Edit" onPress={() => console.log("Edit task")} />
+             <CustomDeleteButton title="Delete" onPress={() => console.log("Delete task")} />
+            </View>
+
+            <View style={styles.buttonContainer}> 
+                <View style={styles.buttons}>
+                    <Button  title="new Task" color={"#bfb0b0"} onPress={addNewTask} />
                 </View>
-                
-                <TextInput value=""
-                 placeholder="Enter the task"
-                 style={styles.textInput} 
-                //  onChange={addTask}
-                />
-                 <View >
-                    <CustomEditButton  title="Edit" onPress={ (event)=>editTask(id)}  />
-                 </View>
-                 <View>
-                    <CustomDeleteButton title="Delete" onPress={deletetask} />
-                 </View>
+            </View> 
+
+            {/* <ScrollView  contentContainerStyle={styles.contentContainer}>
+            <View>
+            {tasks.map((task)=>(
+                <View key={task.id} style={styles.inputRow}>
+                    
+                </View>
+            ))}
             </View>
-        ))}
-        </View>
-        
-        <View style={styles.buttonContainer}> 
-            <View style={styles.buttons}>
-                <Button  title="new Task" color={"#bfb0b0"} onPress={addNewTask} />
+            
+            
+            </ScrollView> */}
+
+            <View style={styles.bottomtap}>
+                <Button title="All Task" color={"#bfb0b0"} />
             </View>
-        </View> 
-        </ScrollView>
-
-        <View style={styles.bottomtap}>
-            <Button title="All Task" color={"#bfb0b0"} onPress={addNewTask} />
-        </View>
-        </>
-    )   
-}
+            </>
+        )   
+    }
 
 
 
 
 
-export default Home;
+    export default Home;
