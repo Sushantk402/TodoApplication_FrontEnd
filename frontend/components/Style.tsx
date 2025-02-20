@@ -12,7 +12,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius:20,
-        margin:20,
+        margin:10,
+    },
+    todo:{
+        minHeight: 10,
+        flexDirection:'row',
+        padding : 5,
+        backgroundColor : 'grey',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius:20,
+        margin:5,
+    },
+    todotext:{
+        borderWidth: 1, 
+        borderColor: "#ccc", 
+        borderRadius: 8, 
+        padding: 10, 
+        fontSize: 16, 
+        width: "70%", 
+        backgroundColor: "#fff",
+        margin:5
     },
     row:{
         alignItems:'center',
@@ -51,7 +71,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius:50,
         alignItems:'center',
-        width: '60%',
+        width: '80%',
         alignSelf:'flex-start',
         paddingHorizontal: 10,
         margin:'2%'
@@ -63,6 +83,15 @@ const styles = StyleSheet.create({
     },
     contentContainer:{
         paddingBottom: 80,
+    },
+    editaddButton:{
+        width: 40,
+        height: 40,
+        backgroundColor: '#bfb0b0', 
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+        margin:3
     },
     editButton:{
         width: 30,
