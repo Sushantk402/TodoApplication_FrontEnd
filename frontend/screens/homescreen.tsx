@@ -10,10 +10,18 @@
     import CustomAddButton from "../components/CustomAddButton";
     import { database } from "../../data/models/database";
     import Task from "../../data/models/Task"; 
+    // import CustomDesButton from "../components/CustomDesButton";
+    // import { AddDescription } from "../components/AddDescription";
+    import CustomDetailButton from "../components/CustomDetailButton";
+    import { ShowDetails } from "../components/ShowDetails";
+import { column } from "@nozbe/watermelondb/QueryDescription";
 
     const Home:React.FC=()=>{
         const [tasks, setTasks] = useState<{ id: string; title: string;createdAt: string }[]>([]);
-        const [taskText, setTaskText] = useState("");   
+        const [taskText, setTaskText] = useState("");  
+        
+        const [showDetailsTaskId, setShowDetailsTaskId] = useState<string | null>(null);
+
 
         const fetchTasks = async () =>{
             try{
@@ -47,7 +55,17 @@
               />
 
              <CustomAddButton title="Add" onPress={()=>addNewTask(taskText,setTasks,setTaskText)} />
+
+
+             {/* <CustomDesButton  title="Description" onPress={()=>setShowDescription(true)} /> */}
+                
+
+
             </View>
+            {/* <View>
+                {showDescription && <AddDescription />}
+            </View> */}
+
 
             <View style={styles.buttonContainer}> 
                 <View style={styles.buttons}>
@@ -57,7 +75,8 @@
 
             <ScrollView  contentContainerStyle={styles.contentContainer}>
                 {tasks.map((task)=>(
-                    <View key={task.id} style={styles.row}>
+                    <View key={task.id} >
+                        <View style={styles.row}>
                         <Checkbox />
                         <TextInput 
                         value={task.title}
@@ -69,18 +88,26 @@
                         
                         <CustomEditButton title="Edit" onPress={() => editTask(task.id,task.title,setTasks)} />
                         <CustomDeleteButton title="Delete" onPress={()=>deleteTask(task.id,setTasks)} />
-                        <Text style={{ fontSize: 10, color: "gray" }}>{task.createdAt}</Text>
+
+
+                        <CustomDetailButton title="Details" onPress={()=> setShowDetailsTaskId(task.id)} />
+                        </View>
+
+                        {showDetailsTaskId===task.id && (
+                            <View style={{ marginBottom: 7, paddingHorizontal: 5 }}>
+                            <ShowDetails taskId={task.id}/>
+                            </View>
+                             )}
+                        
+                        
                     </View>
                 ))}
             </ScrollView>
 
-            {/* <View style={styles.bottomtap}>
-                <Button title="All Task" color={"#bfb0b0"} />
-            </View> */}
+           
             </>
         )   
     }
-
 
 
 

@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius:50,
         alignItems:'center',
-        width: '80%',
+        width: '70%',
         alignSelf:'flex-start',
         paddingHorizontal: 10,
         margin:'2%'
