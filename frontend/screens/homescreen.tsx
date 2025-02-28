@@ -5,8 +5,6 @@ import CustomEditButton from "../components/CustomEditButtton";
 import CustomDeleteButton from "../components/CustomDeleteButton";
 import Checkbox from "../components/Checkbox";
 import CustomAddButton from "../components/CustomAddButton";
-import CustomDetailButton from "../components/CustomDetailButton";
-import { ShowDetails } from "../components/ShowDetails";
 import { crud } from "../services/crud";
 
 export type Task = {
@@ -18,8 +16,6 @@ export type Task = {
 const Home: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [taskText, setTaskText] = useState("");
-    const [showDetailsTaskId, setShowDetailsTaskId] = useState<number | null>(null);
-
   
     useEffect(() => {
         crud.fetchTasks(setTasks);
@@ -68,7 +64,7 @@ const Home: React.FC = () => {
                             <Checkbox />
                             <TextInput
                                 value={task.title}
-                                style={[styles.textInput, { width: "55%" }]}
+                                style={[styles.textInput, { width: "70%" }]}
                                 onChangeText={(text) =>
                                     setTasks((prevTask) =>
                                         prevTask.map((t) =>
@@ -85,11 +81,6 @@ const Home: React.FC = () => {
                             <CustomDeleteButton
                                 title="Delete"
                                 onPress={() => handleDeleteTask(task.id)}
-                            />
-
-                            <CustomDetailButton
-                                title="Details"
-                                onPress={() => setShowDetailsTaskId(task.id)}
                             />
                         </View>
 
