@@ -24,7 +24,7 @@ const details = async (id: string): Promise<string> => {
     }
 }
     
-export const ShowDetails:React.FC<{taskId:string}>=({taskId})=>{
+export const ShowDetails:React.FC<{taskId:Number}>=({taskId})=>{
     
     const [created,setCreated] =useState("");
 
