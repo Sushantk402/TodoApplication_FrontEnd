@@ -1,5 +1,5 @@
-import { database } from "../../data/models/database";
-import Task from "../../data/models/Task"; 
+import { database } from "../../../data/models/database";
+import Task from "../../../data/models/Task"; 
 
 
 export const deleteTask = async(

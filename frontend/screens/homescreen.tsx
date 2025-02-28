@@ -7,64 +7,37 @@ import Checkbox from "../components/Checkbox";
 import CustomAddButton from "../components/CustomAddButton";
 import CustomDetailButton from "../components/CustomDetailButton";
 import { ShowDetails } from "../components/ShowDetails";
-import { TodoControllerApi ,Configuration } from "../api";
-import { apiClient } from "../client";
+import { crud } from "../services/crud";
 
-const apiClientInstance = apiClient();
-
-type Task = {
+export type Task = {
     id: number;
     title: string;
 };
 
-type Todo = {
-    id: number;
-    title: string;
-    createdAt: Date; 
-};
 
 const Home: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [taskText, setTaskText] = useState("");
     const [showDetailsTaskId, setShowDetailsTaskId] = useState<number | null>(null);
 
-    const fetchTasks = async () => {
-        try {
-            const todos = await apiClientInstance.getAllTodos();
-            const newTasks = todos
-            .filter((task) => task.id !== undefined)
-            .map((task) => ({
-                id: task.id as number, 
-                title: task.title,
-            }));
-        setTasks(newTasks);
-        
-        } catch (error) {
-            console.error("Error fetching tasks:", error);  
-            Alert.alert("Error", "Could not load tasks.");
-        }
-    };
-
-    const addNewTask = async (title: string) => {
-        try {
-            const newTask = await apiClientInstance.createTodo({ todo: { title } as Todo });
-            setTasks((prev) => [
-                ...prev,
-                {
-                    id: newTask.id!,
-                    title: newTask.title,
-                },
-            ]);
-            setTaskText("");
-        } catch (error) {
-            console.error("Error adding task: ", error);
-            Alert.alert("Error", "Could not add task");
-        }
-    };
-
+  
     useEffect(() => {
-        fetchTasks();
+        crud.fetchTasks(setTasks);
     }, []);
+
+    const handleAddTask = () =>{
+        if(taskText.trim()){
+            crud.addNewTask(taskText,setTasks,setTaskText)
+        }
+    };
+
+    const handleEditTask = (id : number,title : string) =>{
+        crud.editTask(id,title);
+    };
+
+    const handleDeleteTask = (id : number) =>{
+        crud.deleteTask(id,setTasks);
+    };
 
     return (
         <>
@@ -79,7 +52,7 @@ const Home: React.FC = () => {
                     style={styles.textInput}
                     onChangeText={setTaskText}
                 />
-                <CustomAddButton title="Add" onPress={() => addNewTask(taskText)} />
+                <CustomAddButton title="Add" onPress={handleAddTask} />
             </View>
 
             <View style={styles.buttonContainer}>
@@ -104,25 +77,23 @@ const Home: React.FC = () => {
                                     )
                                 }
                             />
-                            {/* <CustomEditButton
+                             <CustomEditButton
                                 title="Edit"
-                                onPress={() => editTask(task.id, task.title, setTasks)}
+                                onPress={() => handleEditTask(task.id, task.title)}
                             />
+
                             <CustomDeleteButton
                                 title="Delete"
-                                onPress={() => deleteTask(task.id, setTasks)}
-                            /> */}
+                                onPress={() => handleDeleteTask(task.id)}
+                            />
+
                             <CustomDetailButton
                                 title="Details"
                                 onPress={() => setShowDetailsTaskId(task.id)}
                             />
                         </View>
 
-                        {/* {showDetailsTaskId === task.id && (
-                            <View style={{ marginBottom: 7, paddingHorizontal: 5 }}>
-                                <ShowDetails taskId={task.id} />
-                            </View>
-                        )} */}
+                        
                     </View>
                 ))}
             </ScrollView>
